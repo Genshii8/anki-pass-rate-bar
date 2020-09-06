@@ -14,8 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-import aqt.reviewer
+import aqt
 import typing
 import time
 from typing import Dict, Tuple, List, Optional
@@ -36,7 +35,7 @@ def on_webview_will_set_content(web_content: aqt.webview.WebContent, context):
     pr_delta        = max(1, config["passrate.time_range"])
     info            = get_review_info(pr_delta)
 
-    if info is None or len(info) == 0:
+    if info is None or len(info) == 0 or info["review_total"] < 5:
         return
 
     prD7            = int(info["review_pass_rate"])
@@ -45,7 +44,7 @@ def on_webview_will_set_content(web_content: aqt.webview.WebContent, context):
         info        = get_review_info(365)
         prD365      = int(info["review_pass_rate"])
 
-        if info["all_wrong"] + info["all_correct"] > 500:
+        if info["review_total"] > 500:
             PR_365 = prD365
     else:
         prD365      = PR_365
@@ -80,6 +79,10 @@ def on_webview_will_set_content(web_content: aqt.webview.WebContent, context):
                 border-top-right-radius: 6px; 
                 border-bottom-right-radius: 6px;
             }}
+            .tr_pr_right.pr_100 {{
+                border-top-left-radius: 6px; 
+                border-bottom-left-radius: 6px;
+            }}
         </style>
 
     """
@@ -90,10 +93,10 @@ def on_webview_will_set_content(web_content: aqt.webview.WebContent, context):
     if config["show.last_year"]:
         pr_year = f"""
                 <div style='width: 600px; text-align: left;'>
-                    <div style='width: 300px; display: inline-block; box-sizing: border-box; white-space: nowrap; text-align: center; margin: 10px 0 30px 0; zoom: 0.8;'>
+                    <div style='width: 300px; position: relative; display: inline-block; box-sizing: border-box; white-space: nowrap; text-align: center; margin: 10px 0 30px 0; zoom: 0.8;'>
                         <div style='margin-bottom: 6px; font-weight: bold; text-align: left; font-variant: all-petite-caps; opacity: 0.6;'>Pass Rate, last 365 days</div>
-                        <div class='tr_pr tr_pr_left pr_{int(prD365)}' style='width: {prD365}%'><span style='vertical-align: middle;'>{prD365}%</span></div> 
-                        <div class='tr_pr tr_pr_right' style='width: {100-prD365}%'><span style='vertical-align: middle;'>&nbsp;</span></div> 
+                        <div class='tr_pr tr_pr_left pr_{int(prD365)}' style='width: {prD365}%'><span style='vertical-align: middle; position: absolute; right: 50%;'>{prD365}%</span></div> 
+                        <div class='tr_pr tr_pr_right pr_{int(100-prD365)}' style='width: {100-prD365}%'><span style='vertical-align: middle;'>&nbsp;</span></div> 
                     </div> 
                 </div> 
             """
@@ -104,8 +107,8 @@ def on_webview_will_set_content(web_content: aqt.webview.WebContent, context):
             let html = `
                 <div style='width: 600px; box-sizing: border-box; white-space: nowrap; text-align: center; margin: 30px 0 0 0;'>
                     <div style='margin-bottom: 6px; font-weight: bold; text-align: left; font-variant: all-petite-caps; opacity: 0.6;'>Pass Rate, {pr_lbl}</div>
-                    <div class='tr_pr tr_pr_left pr_{int(prD7)}' style='width: {prD7}%'><span style='vertical-align: middle;'>{prD7}%</span></div> 
-                    <div class='tr_pr tr_pr_right' style='width: {100-prD7}%;'><span style='vertical-align: middle;'>&nbsp;</span></div> 
+                    <div class='tr_pr tr_pr_left pr_{int(prD7)}' style='width: {prD7}%'><span style='vertical-align: middle; position: absolute; right: 50%;'>{prD7}%</span></div> 
+                    <div class='tr_pr tr_pr_right pr_{int(100-prD7)}' style='width: {100-prD7}%;'><span style='vertical-align: middle;'>&nbsp;</span></div> 
                 </div> 
                 {pr_year}
             `;
@@ -135,6 +138,7 @@ def get_review_info(delta_days: int) -> Dict[str, float]:
     idict["review_wrong"]           = review_wrong
     idict["all_wrong"]              = all_wrong
     idict["all_correct"]            = all_correct
+    idict["review_total"]           = review_correct + review_wrong
 
     return idict
 
