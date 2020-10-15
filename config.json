@@ -1,6 +1,5 @@
 {
-    "bar.background": "steelblue",
-    "bar.foreground": "seashell",
-    "show.last_year": false,
+    "bar.background": "gray",
+    "bar.foreground": "steelblue",
     "passrate.time_range": 7
 }
