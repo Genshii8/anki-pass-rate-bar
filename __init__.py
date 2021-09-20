@@ -101,10 +101,10 @@ def get_review_info(delta_days: int) -> Dict[str, float]:
         idict["review_pass_rate"] = 0
     else:
         idict["review_pass_rate"] = round(
-            review_correct * 100.0 / (review_wrong + review_correct), 1)
+            review_correct * 100.0 / (review_wrong + review_correct), 1
+        )
 
-    idict["all_pass_rate"] = round(
-        all_correct * 100.0 / (all_wrong + all_correct), 1)
+    idict["all_pass_rate"] = round(all_correct * 100.0 / (all_wrong + all_correct), 1)
     idict["review_correct"] = review_correct
     idict["review_wrong"] = review_wrong
     idict["all_wrong"] = all_wrong
@@ -115,7 +115,7 @@ def get_review_info(delta_days: int) -> Dict[str, float]:
 
 
 def nid_now() -> int:
-    return int(time.time()*1000)
+    return int(time.time() * 1000)
 
 
 def nid_midnight(delta_n: int) -> int:
@@ -124,10 +124,10 @@ def nid_midnight(delta_n: int) -> int:
     E.g. delta_n = 1 means last midnight.
     """
     now = nid_now()
-    days, rem = divmod(now, 24*3600 * 1000)
+    days, rem = divmod(now, 24 * 3600 * 1000)
     last_midnight = now - rem
 
-    return last_midnight - 24*3600*1000*(delta_n - 1)
+    return last_midnight - 24 * 3600 * 1000 * (delta_n - 1)
 
 
 def _rev_counts(revs: List[Tuple[int, int]]) -> Tuple[int, int, int, int]:

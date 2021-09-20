@@ -1,5 +1,5 @@
 {
-    "bar.background": "gray",
-    "bar.foreground": "steelblue",
-    "passrate.time_range": 7
+  "bar.background": "gray",
+  "bar.foreground": "steelblue",
+  "passrate.time_range": 7
 }

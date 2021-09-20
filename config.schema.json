@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Review Pass Rate Bar",
+
+  "type": "object",
+  "properties": {
+    "bar.background": {
+      "title": "Bar Background Color",
+      "type": "string",
+      "description": "Color for the bar background."
+    },
+    "bar.foreground": {
+      "title": "Bar Foreground Color",
+      "type": "string",
+      "description": "Color for the bar foreground."
+    },
+    "passrate.time_range": {
+      "title": "Pass Rate Time Range",
+      "type": "number",
+      "description": "Controls how far the addon looks back to calculate the pass rate. Default value of 7 means calculate the pass rate over the last 7 days."
+    }
+  }
+}
